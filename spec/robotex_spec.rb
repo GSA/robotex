@@ -47,35 +47,35 @@ describe Robotex do
     context 'when the robots.txt disallows the user-agent to the url' do
       it 'returns false' do
         robotex = Robotex.new('bender')
-        robotex.allowed?(SPEC_DOMAIN + 'my_shiny_metal_ass').should be_false
+        robotex.allowed?(SPEC_DOMAIN + 'my_shiny_metal_ass').should be_falsey
       end
     end
 
     context 'when the robots.txt disallows the user-agent to some urls, but allows this one' do
       it 'returns true' do
         robotex = Robotex.new('bender')
-        robotex.allowed?(SPEC_DOMAIN + 'cigars').should be_true
+        robotex.allowed?(SPEC_DOMAIN + 'cigars').should be_truthy
       end
     end
 
     context 'when the robots.txt disallows any user-agent to the url' do
       it 'returns false' do
         robotex = Robotex.new
-        robotex.allowed?(SPEC_DOMAIN + 'login').should be_false
+        robotex.allowed?(SPEC_DOMAIN + 'login').should be_falsey
       end
     end
 
     context 'when the robots.txt disallows and then allows the url' do
       it 'returns false' do
         robotex = Robotex.new
-        robotex.allowed?(SPEC_DOMAIN + 'locked').should be_false
+        robotex.allowed?(SPEC_DOMAIN + 'locked').should be_falsey
       end
     end
 
     context 'when a rule includes a comment' do
       it 'returns false' do
         robotex = Robotex.new
-        robotex.allowed?(SPEC_DOMAIN + 'archive/old').should be_false
+        robotex.allowed?(SPEC_DOMAIN + 'archive/old').should be_falsey
       end
     end
 
@@ -91,7 +91,7 @@ describe Robotex do
 
       it 'returns false' do
         robotex = Robotex.new
-        robotex.allowed?(SPEC_DOMAIN + 'locked').should be_false
+        robotex.allowed?(SPEC_DOMAIN + 'locked').should be_falsey
       end
     end
   end
