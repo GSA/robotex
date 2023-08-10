@@ -19,13 +19,11 @@ describe Robotex do
     ROBOTS
   end
 
-  let(:response) do
-    { body: robots, content_type: 'text/plain', status: [200, "OK"] }
-  end
+  let(:robots_url) { "#{ SPEC_DOMAIN }robots.txt" }
 
   before do
-    FakeWeb.allow_net_connect = false
-    FakeWeb.register_uri(:get, SPEC_DOMAIN + 'robots.txt', response)
+    stub_request(:get, robots_url)
+      .to_return(body: robots, headers: {'Content-Type' => "text/plain"}, status: [200, "OK"])
   end
 
   describe '#initialize' do
@@ -80,13 +78,11 @@ describe Robotex do
     end
 
     context 'when the robots.txt url is redirected' do
-      let(:redirection) do
-        { status: [301], location: 'https://example.com/robots.txt' }
-      end
+      let(:robots_url) { "#{ SPEC_DOMAIN }real-robots.txt" }
 
       before do
-        FakeWeb.register_uri(:get, SPEC_DOMAIN + 'robots.txt', redirection)
-        FakeWeb.register_uri(:get, 'https://example.com/robots.txt', response)
+        stub_request(:get, "#{ SPEC_DOMAIN }robots.txt" )
+          .to_return(status: [301], headers: { Location: robots_url })
       end
 
       it 'returns false' do
