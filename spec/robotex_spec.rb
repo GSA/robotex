@@ -106,6 +106,23 @@ describe Robotex do
         robotex.delay(SPEC_DOMAIN).should == 20
       end
     end
+
+    context 'when a more specific rule is declared' do
+      let(:robots) do
+        <<~ROBOTS
+          User-agent: *
+          Crawl-delay: 10
+
+          User-agent: usasearch
+          Crawl-delay: 2
+        ROBOTS
+      end
+
+      it 'overrides more generic ones' do
+        robotex = Robotex.new('usasearch')
+        robotex.delay(SPEC_DOMAIN).should == 2
+      end
+    end
   end
 
   describe '#sitemaps' do
