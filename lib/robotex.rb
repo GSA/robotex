@@ -27,7 +27,7 @@ class Robotex
 
       @disallows = {}
       @allows = {}
-      @delays = {}
+      @delays = []
       @sitemaps = []
       agent = /.*/
       io.each do |line|
@@ -46,15 +46,17 @@ class Robotex
             @disallows[agent] ||= []
             @disallows[agent] << to_regex(value)
           when "crawl-delay"
-            @delays[agent] = value.to_i
+            @delays << [agent, value.to_i]
           when "sitemap"
             @sitemaps << URI.join(uri, value).to_s
         end
       end
+
+      @delays.sort_by! { |(agent, rule)| agent.to_s.size }.reverse!
       
       @parsed = true
     end
-    
+
     def allowed?(uri, user_agent)
       return true unless @parsed
       allowed = true
